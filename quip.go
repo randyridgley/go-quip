@@ -9,20 +9,18 @@ import (
 	"strings"
 )
 
-const (
-	BASE_API_URL = "https://platform.quip.com"
-)
-
 type Client struct {
 	accessToken  string
 	clientId     string
 	clientSecret string
 	redirectUri  string
+	baseApiUrl   string
 }
 
-func NewClient(accessToken string) *Client {
+func NewClient(accessToken string, platformApiUrl string) *Client {
 	return &Client{
 		accessToken: accessToken,
+		baseApiUrl: platformApiUrl
 	}
 }
 
@@ -78,16 +76,16 @@ func (q *Client) doRequest(req *http.Request) []byte {
 	return body
 }
 
+func (q *Client) apiUrlResource(resource string) string {
+	return q.baseApiUrl + "/1/" + resource
+}
+
 func mapToQueryString(params map[string]string) *strings.Reader {
 	body := url.Values{}
 	for k, v := range params {
 		body.Set(k, v)
 	}
 	return strings.NewReader(body.Encode())
-}
-
-func apiUrlResource(resource string) string {
-	return BASE_API_URL + "/1/" + resource
 }
 
 func required(val interface{}, message string) {
