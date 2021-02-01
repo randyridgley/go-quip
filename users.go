@@ -26,7 +26,7 @@ type GetUsersParams struct {
 func (q *Client) GetUser(params *GetUserParams) *User {
 	required(params.Id, "Id is required for /users/id")
 
-	resp := q.getJson(apiUrlResource("users/"+params.Id), map[string]string{})
+	resp := q.getJson("users/"+params.Id, map[string]string{})
 	parsed := parseJsonObject(resp)
 
 	return hydrateUser(parsed)
@@ -35,21 +35,21 @@ func (q *Client) GetUser(params *GetUserParams) *User {
 func (q *Client) GetUsers(params *GetUsersParams) []*User {
 	required(params.Ids, "Ids is required for /users/ids")
 
-	resp := q.getJson(apiUrlResource("users/"+strings.Join(params.Ids, ",")), map[string]string{})
+	resp := q.getJson("users/"+strings.Join(params.Ids, ","), map[string]string{})
 	parsed := parseJsonObject(resp)
 
 	return hydrateUsersMap(parsed)
 }
 
 func (q *Client) GetContacts() []*User {
-	resp := q.getJson(apiUrlResource("users/contacts"), map[string]string{})
+	resp := q.getJson("users/contacts", map[string]string{})
 	parsed := parseJsonArray(resp)
 
 	return hydrateUsersArray(parsed)
 }
 
 func (q *Client) GetAuthenticatedUser() *User {
-	resp := q.getJson(apiUrlResource("users/current"), map[string]string{})
+	resp := q.getJson("users/current", map[string]string{})
 	parsed := parseJsonObject(resp)
 
 	return hydrateUser(parsed)

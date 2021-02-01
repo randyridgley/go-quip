@@ -46,14 +46,14 @@ type RemoveMembersParams struct {
 }
 
 func (q *Client) GetThread(id string) *Thread {
-	resp := q.getJson(apiUrlResource("threads/"+id), map[string]string{})
+	resp := q.getJson("threads/"+id, map[string]string{})
 	parsed := parseJsonObject(resp)
 	return hydrateThread(parsed)
 }
 
 func (q *Client) GetThreads(ids []string) []*Thread {
 	qid := strings.Join(ids, ",")
-	resp := q.getJson(apiUrlResource("threads/?ids="+qid), map[string]string{})
+	resp := q.getJson("threads/?ids="+qid, map[string]string{})
 	parsed := parseJsonObject(resp)
 	return hydrateThreads(parsed)
 }
@@ -64,7 +64,7 @@ func (q *Client) GetRecentThreads(params *GetRecentThreadsParams) []*Thread {
 	setOptional(params.Count, "count", &requestParams)
 	setOptional(params.MaxUpdatedUsec, "max_updated_usec", &requestParams)
 
-	resp := q.getJson(apiUrlResource("threads/recent"), requestParams)
+	resp := q.getJson("threads/recent", requestParams)
 	parsed := parseJsonObject(resp)
 	return hydrateThreads(parsed)
 }
@@ -78,7 +78,7 @@ func (q *Client) NewDocument(params *NewDocumentParams) *Thread {
 	setOptional(strings.Join(params.MemberIds, ","), "member_ids", &requestParams)
 
 	fmt.Println(requestParams)
-	resp := q.postJson(apiUrlResource("threads/new-document"), requestParams)
+	resp := q.postJson("threads/new-document", requestParams)
 	parsed := parseJsonObject(resp)
 	return hydrateThread(parsed)
 }
@@ -92,7 +92,7 @@ func (q *Client) EditDocument(params *EditDocumentParams) *Thread {
 	setOptional(params.Location, "location", &requestParams)
 	setOptional(strings.Join(params.MemberIds, ","), "member_ids", &requestParams)
 
-	resp := q.postJson(apiUrlResource("threads/edit-document"), requestParams)
+	resp := q.postJson("threads/edit-document", requestParams)
 
 	return hydrateThread(resp)
 }
@@ -105,7 +105,7 @@ func (q *Client) AddMembers(params *AddMembersParams) *Thread {
 	requestParams["thread_id"] = params.ThreadId
 	requestParams["member_ids"] = strings.Join(params.MemberIds, ",")
 
-	resp := q.postJson(apiUrlResource("threads/add-members"), requestParams)
+	resp := q.postJson("threads/add-members", requestParams)
 	parsed := parseJsonObject(resp)
 	return hydrateThread(parsed)
 }
@@ -118,7 +118,7 @@ func (q *Client) RemoveMembers(params *RemoveMembersParams) *Thread {
 	requestParams["thread_id"] = params.ThreadId
 	requestParams["member_ids"] = strings.Join(params.MemberIds, ",")
 
-	resp := q.postJson(apiUrlResource("threads/remove-members"), requestParams)
+	resp := q.postJson("threads/remove-members", requestParams)
 	parsed := parseJsonObject(resp)
 	return hydrateThread(parsed)
 }

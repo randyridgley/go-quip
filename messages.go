@@ -28,7 +28,7 @@ func (q *Client) GetRecentMessages(params *GetRecentMessagesParams) []*Message {
 	setOptional(params.Count, "count", &requestParams)
 	setOptional(params.MaxUpdatedUsec, "max_updated_usec", &requestParams)
 
-	resp := q.getJson(apiUrlResource("messages/"+params.ThreadId), requestParams)
+	resp := q.getJson("messages/"+params.ThreadId, requestParams)
 	parsed := parseJsonArray(resp)
 
 	return hydrateMessages(parsed)
@@ -42,7 +42,7 @@ func (q *Client) NewMessage(params *NewMessageParams) *Message {
 
 	setOptional(params.Silent, "silent", &requestParams)
 
-	resp := q.postJson(apiUrlResource("messages/new"), requestParams)
+	resp := q.postJson("messages/new", requestParams)
 	parsed := parseJsonObject(resp)
 
 	return hydrateMessage(parsed)

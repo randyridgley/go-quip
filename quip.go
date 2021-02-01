@@ -20,7 +20,7 @@ type Client struct {
 func NewClient(accessToken string, platformApiUrl string) *Client {
 	return &Client{
 		accessToken: accessToken,
-		baseApiUrl: platformApiUrl
+		baseApiUrl:  platformApiUrl,
 	}
 }
 
@@ -35,7 +35,7 @@ func NewClientOAuth(accessToken string, clientId string, clientSecret string, re
 }
 
 func (q *Client) postJson(resource string, params map[string]string) []byte {
-	req, err := http.NewRequest("POST", resource, mapToQueryString(params))
+	req, err := http.NewRequest("POST", apiUrlResource(q.baseApiUrl, resource), mapToQueryString(params))
 	if err != nil {
 		log.Fatal("Bad url: " + resource)
 	}
@@ -55,7 +55,7 @@ func (q *Client) getJson(resource string, params map[string]string) []byte {
 		resource = resource + "?" + queryString
 	}
 
-	req, err := http.NewRequest("GET", resource, nil)
+	req, err := http.NewRequest("GET", apiUrlResource(q.baseApiUrl, resource), nil)
 	if err != nil {
 		log.Fatal("Bad url: " + resource)
 	}
@@ -76,8 +76,8 @@ func (q *Client) doRequest(req *http.Request) []byte {
 	return body
 }
 
-func (q *Client) apiUrlResource(resource string) string {
-	return q.baseApiUrl + "/1/" + resource
+func apiUrlResource(baseApiUrl string, resource string) string {
+	return baseApiUrl + "/1/" + resource
 }
 
 func mapToQueryString(params map[string]string) *strings.Reader {

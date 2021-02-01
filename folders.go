@@ -49,7 +49,7 @@ type NewFolderParams struct {
 func (q *Client) GetFolder(params *GetFolderParams) *Folder {
 	required(params.Id, "Id is required for /folder/id")
 
-	resp := q.getJson(apiUrlResource("folders/"+params.Id), map[string]string{})
+	resp := q.getJson("folders/"+params.Id, map[string]string{})
 	parsed := parseJsonObject(resp)
 
 	return hydrateFolder(parsed)
@@ -58,7 +58,7 @@ func (q *Client) GetFolder(params *GetFolderParams) *Folder {
 func (q *Client) GetFolders(params *GetFoldersParams) []*Folder {
 	required(params.Ids, "Ids is required for /folder/ids")
 
-	resp := q.getJson(apiUrlResource("folders/"+strings.Join(params.Ids, ",")), map[string]string{})
+	resp := q.getJson("folders/"+strings.Join(params.Ids, ","), map[string]string{})
 	parsed := parseJsonObject(resp)
 
 	return hydrateFolders(parsed)
@@ -71,7 +71,7 @@ func (q *Client) NewFolder(params *NewFolderParams) *Folder {
 	setOptional(params.Color, "color", &requestParams)
 	setOptional(params.MemberIds, "member_ids", &requestParams)
 
-	resp := q.postJson(apiUrlResource("folders/new"), requestParams)
+	resp := q.postJson("folders/new", requestParams)
 	parsed := parseJsonObject(resp)
 
 	fmt.Println(string(resp))
@@ -84,7 +84,7 @@ func (q *Client) AddFolderMembers(params *AddFolderMembersParams) *Folder {
 	setRequired(params.FolderId, "folder_id", &requestParams, "FolderId is required for /folder/add-members")
 	setRequired(params.MemberIds, "member_ids", &requestParams, "MemberIds is required for /folder/add-members")
 
-	resp := q.postJson(apiUrlResource("folders/add-members"), requestParams)
+	resp := q.postJson("folders/add-members", requestParams)
 	parsed := parseJsonObject(resp)
 
 	return hydrateFolder(parsed)
@@ -95,7 +95,7 @@ func (q *Client) RemoveFolderMembers(params *RemoveFolderMembersParams) *Folder 
 	setRequired(params.FolderId, "folder_id", &requestParams, "FolderId is required for /folder/remove-members")
 	setRequired(params.MemberIds, "member_ids", &requestParams, "MemberIds is required for /folder/remove-members")
 
-	resp := q.postJson(apiUrlResource("folders/remove-members"), requestParams)
+	resp := q.postJson("folders/remove-members", requestParams)
 	parsed := parseJsonObject(resp)
 
 	return hydrateFolder(parsed)
