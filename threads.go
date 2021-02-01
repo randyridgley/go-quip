@@ -69,6 +69,16 @@ func (q *Client) GetRecentThreads(params *GetRecentThreadsParams) []*Thread {
 	return hydrateThreads(parsed)
 }
 
+func (q *Client) GetRecentThreadsRaw(params *GetRecentThreadsParams) map[string]interface{} {
+	requestParams := make(map[string]string)
+
+	setOptional(params.Count, "count", &requestParams)
+	setOptional(params.MaxUpdatedUsec, "max_updated_usec", &requestParams)
+
+	resp := q.getJson("threads/recent", requestParams)
+	return parseJsonObject(resp)
+}
+
 func (q *Client) NewDocument(params *NewDocumentParams) *Thread {
 	requestParams := make(map[string]string)
 
